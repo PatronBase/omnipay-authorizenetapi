@@ -23,9 +23,15 @@
             "Omnipay\\AuthorizeNetApi\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/PatronBase/authorizenet-objects"
+        }
+    ],
     "require": {
         "omnipay/common": "^3",
-        "academe/authorizenet-objects": "~0.7",
+        "academe/authorizenet-objects": "subscription-support-dev",
         "symfony/property-access": "^3.2 || ^4.0"
     },
     "require-dev": {

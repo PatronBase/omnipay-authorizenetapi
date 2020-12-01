@@ -14,6 +14,7 @@ use Omnipay\AuthorizeNetApi\Message\VoidRequest;
 use Omnipay\AuthorizeNetApi\Message\RefundRequest;
 use Omnipay\AuthorizeNetApi\Message\FetchTransactionRequest;
 use Omnipay\AuthorizeNetApi\Message\AcceptNotification;
+use Omnipay\AuthorizeNetApi\Message\RecurringBilling\CreateSubscriptionRequest;
 
 class ApiGateway extends AbstractGateway
 {
@@ -87,6 +88,17 @@ class ApiGateway extends AbstractGateway
     {
         return $this->createRequest(
             AcceptNotification::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Create a subscription
+     */
+    public function createSubscription(array $parameters = [])
+    {
+        return $this->createRequest(
+            CreateSubscriptionRequest::class,
             $parameters
         );
     }
