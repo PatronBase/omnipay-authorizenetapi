@@ -14,6 +14,11 @@ use Omnipay\AuthorizeNetApi\Message\VoidRequest;
 use Omnipay\AuthorizeNetApi\Message\RefundRequest;
 use Omnipay\AuthorizeNetApi\Message\FetchTransactionRequest;
 use Omnipay\AuthorizeNetApi\Message\AcceptNotification;
+use Omnipay\AuthorizeNetApi\Message\AuthenticateTestRequest;
+use Omnipay\AuthorizeNetApi\Message\CustomerProfiles\GetCustomerPaymentProfileRequest;
+use Omnipay\AuthorizeNetApi\Message\RecurringBilling\CreateSubscriptionRequest;
+use Omnipay\AuthorizeNetApi\Message\Webhooks\CreateWebhookRequest;
+use Omnipay\AuthorizeNetApi\Message\Webhooks\GetWebhookRequest;
 
 class ApiGateway extends AbstractGateway
 {
@@ -87,6 +92,61 @@ class ApiGateway extends AbstractGateway
     {
         return $this->createRequest(
             AcceptNotification::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Create a subscription
+     */
+    public function createSubscription(array $parameters = [])
+    {
+        return $this->createRequest(
+            CreateSubscriptionRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Fetch a customer payment profile
+     */
+    public function getCustomerPaymentProfile(array $parameters = [])
+    {
+        return $this->createRequest(
+            GetCustomerPaymentProfileRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Test current authentication credentials
+     */
+    public function authenticateTest(array $parameters = [])
+    {
+        return $this->createRequest(
+            AuthenticateTestRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Create a webhook
+     */
+    public function createWebhook(array $parameters = [])
+    {
+        return $this->createRequest(
+            CreateWebhookRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Get a webhook
+     */
+    public function getWebhook(array $parameters = [])
+    {
+        return $this->createRequest(
+            GetWebhookRequest::class,
             $parameters
         );
     }

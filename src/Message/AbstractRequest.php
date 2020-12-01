@@ -13,6 +13,7 @@ use Academe\AuthorizeNet\Auth\MerchantAuthentication;
 use Academe\AuthorizeNet\TransactionRequestInterface;
 use Academe\AuthorizeNet\Request\CreateTransaction;
 use Academe\AuthorizeNet\Request\AbstractRequest as ApiAbstractRequest;
+use Academe\AuthorizeNet\SubscriptionRequestInterface;
 use Omnipay\AuthorizeNetApi\Traits\HasGatewayParams;
 
 abstract class AbstractRequest extends OmnipayAbstractRequest
@@ -30,7 +31,7 @@ abstract class AbstractRequest extends OmnipayAbstractRequest
      */
     public function getAuth()
     {
-         return new MerchantAuthentication($this->getAuthName(), $this->getTransactionKey());
+        return new MerchantAuthentication($this->getAuthName(), $this->getTransactionKey());
     }
 
     /**
