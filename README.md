@@ -421,7 +421,7 @@ information.
 The webhooks can be configured in the Authorize.Net account settings page.
 They can also be fully managed through a REST API, so that a merchant
 site can register for all the webhooks that it needs.
-*Note that the webhook management RESTful API has not yet been implemented here.*
+*Note that the webhook management RESTful API is only partially implemented here.*
 
 Your notification handler is set up like this at your webhook endpoint:
 
@@ -431,7 +431,7 @@ $gateway = Omnipay::create('AuthorizeNetApi_Api');
 $gateway->setAuthName($authName);
 $gateway->setTransactionKey($authKey);
 $gateway->setSignatureKey($signatureKey); // HMAC-256
-$gateway->setTestMode(true); // for false
+$gateway->setTestMode(true); // or false
 
 $notification = $gateway->acceptNotification();
 ```
@@ -495,7 +495,7 @@ Validation of the `signature` can be disabled if needed:
 
 For consistency with other Omipay Drivers, this driver *may* make an
 opinionated decision on how the `transactionId` is passed into the
-notification handler, but only after researchign how other people are
+notification handler, but only after researching how other people are
 handling it.
 There is a front-end way to do it through an iframe, but it seems
 vulnerable to user manipulation to me.

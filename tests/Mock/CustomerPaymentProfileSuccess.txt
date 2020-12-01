@@ -1,0 +1,45 @@
+HTTP/1.1 200 OK
+Date: Sat, 16 Feb 2013 06:39:41 GMT
+X-Opnet-Transaction-Trace: 2b1726b9-2b7a-49f7-a5c6-24cd2622000b-8580-2210
+Content-Type: application/json
+X-Anet-Signature: sha512=13151697A33C77CB102AAA060CD58FB2394696BAEA981047A31830A8A1853A4C8D454E696871A38A68B6940B8746FC096111334D584579F6792F568A622A0373
+Content-Length: 340
+Connection: close
+X-Accel-Internal: /internal-nginx-static-location
+X-Forwarded-For: 198.241.207.38
+X-Real-Ip: 198.241.207.38
+Host: omnipay.example.co.uk
+
+{
+    "paymentProfile": {
+        "customerProfileId": "39598611",
+        "customerPaymentProfileId": "35936989",
+        "payment": {
+            "creditCard": {
+                "cardNumber": "XXXX1111",
+                "expirationDate": "XXXX",
+                "cardType": "Visa",
+                "issuerNumber": "411111",
+                "isPaymentToken": true
+            }
+        },
+        "subscriptionIds": [
+            "3078153",
+            "3078154"
+        ],
+        "customerType": "individual",
+        "billTo": {
+            "firstName": "John",
+            "lastName": "Smith"
+        }
+    },
+    "messages": {
+        "resultCode": "Ok",
+        "message": [
+            {
+                "code": "I00001",
+                "text": "Successful."
+            }
+        ]
+    }
+}
