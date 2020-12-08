@@ -50,8 +50,8 @@ class CreateSubscriptionRequest extends AbstractRequest
             null
         );
 
-        if ($this->getName()) {
-            $subscription = $subscription->withName($this->getName());
+        if ($this->getSubscriptionName()) {
+            $subscription = $subscription->withName($this->getSubscriptionName());
         }
 
         // Build the customer, and add the customer to the transaction
@@ -164,17 +164,17 @@ class CreateSubscriptionRequest extends AbstractRequest
      * @param string $value The name for the subscription, max 50 characters
      * @return self
      */
-    public function setName($value)
+    public function setSubscriptionName($value)
     {
-        return $this->setParameter('name', $value);
+        return $this->setParameter('subscriptionName', $value);
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getSubscriptionName()
     {
-        return $this->getParameter('name');
+        return $this->getParameter('subscriptionName');
     }
 
     /**
@@ -256,11 +256,12 @@ class CreateSubscriptionRequest extends AbstractRequest
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getTrialOccurrences()
     {
-        return (string) $this->getParameter('trialOccurrences');
+        $value = $this->getParameter('trialOccurrences');
+        return $value === null ? $value : (string) $value;
     }
 
 
@@ -315,12 +316,15 @@ class CreateSubscriptionRequest extends AbstractRequest
     /**
      * Sets the trial payment amount.
      *
-     * @param string|null $value
+     * @param string|Money|null $value
      * @return $this
      */
     public function setTrialAmount($value)
     {
-        return $this->setParameter('trialAmount', $value !== null ? (string) $value : null);
+        if ($value !== null && ! ($value instanceof Money)) {
+            $value = (string) $value;
+        }
+        return $this->setParameter('trialAmount', $value);
     }
 
     /**
