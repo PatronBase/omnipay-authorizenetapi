@@ -394,7 +394,7 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function setOpaqueData($descriptor, $value)
     {
-        $this->setOpaqueDataDataDescriptor($descriptor);
+        $this->setOpaqueDataDescriptor($descriptor);
         $this->setOpaqueDataValue($value);
 
         return $this;
