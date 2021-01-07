@@ -2,6 +2,8 @@
 
 namespace Omnipay\AuthorizeNetApi\Message\RecurringBilling;
 
+use Academe\AuthorizeNet\Payment\CreditCard as PaymentCreditCard;
+use Academe\AuthorizeNet\Payment\OpaqueData;
 use Academe\AuthorizeNet\Request\Model\Interval;
 use Academe\AuthorizeNet\Request\Model\NameAddress;
 use Academe\AuthorizeNet\Request\Model\Subscription;
@@ -36,7 +38,7 @@ class CreateSubscriptionRequestTest extends TestCase
             "amount" => "10.29",
             "card" => new CreditCard([
                 "number" => "4111111111111111",
-                "expiryYear" => "2020",
+                "expiryYear" => "2022",
                 "expiryMonth" => "12",
             ]),
         ]);
@@ -45,7 +47,9 @@ class CreateSubscriptionRequestTest extends TestCase
     public function testBasics()
     {
         $subscription = $this->request->getData();
-        $this->assertSame(Subscription::class, get_class($subscription));
+
+        $this->assertInstanceOf(Subscription::class, $subscription);
+        $this->assertInstanceOf(PaymentCreditCard::class, $subscription->getPayment());
         $this->assertSame("Sample subscription", $subscription->getName());
         $this->assertSame("1", $subscription->getPaymentSchedule()->getInterval()->getLength());
         $this->assertSame("months", $subscription->getPaymentSchedule()->getInterval()->getUnit());
@@ -53,7 +57,7 @@ class CreateSubscriptionRequestTest extends TestCase
         $this->assertSame("12", $subscription->getPaymentSchedule()->getTotalOccurrences());
         $this->assertSame("USD", $subscription->getAmount()->getCurrencyCode());
         $this->assertSame("10.29", $subscription->getAmount()->getFormatted());
-        $this->assertSame("2020-12", $subscription->getPayment()->getExpirationDate());
+        $this->assertSame("2022-12", $subscription->getPayment()->getExpirationDate());
         $this->assertSame("4111111111111111", $subscription->getPayment()->getCardNumber());
         $this->assertSame("1111", $subscription->getPayment()->getLastFourDigits());
         
@@ -62,8 +66,31 @@ class CreateSubscriptionRequestTest extends TestCase
         $this->assertNull($subscription->getPayment()->getCardCode());
         $this->assertNull($subscription->getBillTo());
         $this->assertNull($subscription->getShipTo());
+
+        $this->assertNull($this->request->getToken());
     }
-    
+
+    public function testOpaqueData()
+    {
+        $this->request
+            ->setCard(null)
+            ->setToken("COMMON.ACCEPT.INAPP.PAYMENT:1234567890ABCDEF1111AAAA2222BBBB3333CCCC4444DDDD5555EEEE6666FFFF7777888899990000");
+        
+        $subscription = $this->request->getData();
+
+        $this->assertInstanceOf(OpaqueData::class, $subscription->getPayment());
+
+        $this->assertSame("COMMON.ACCEPT.INAPP.PAYMENT", $this->request->getOpaqueDataDescriptor());
+        $this->assertSame(
+            "1234567890ABCDEF1111AAAA2222BBBB3333CCCC4444DDDD5555EEEE6666FFFF7777888899990000",
+            $this->request->getOpaqueDataValue()
+        );
+        $this->assertSame(
+            "COMMON.ACCEPT.INAPP.PAYMENT:1234567890ABCDEF1111AAAA2222BBBB3333CCCC4444DDDD5555EEEE6666FFFF7777888899990000",
+            $this->request->getToken()
+        );
+    }
+
     public function testFull()
     {
         $this->request->initialize([
@@ -82,7 +109,7 @@ class CreateSubscriptionRequestTest extends TestCase
             "trialAmount" => "0.00",
             "card" => new CreditCard([
                 "number" => "4111111111111111",
-                "expiryYear" => "2020",
+                "expiryYear" => "2022",
                 "expiryMonth" => "12",
                 "firstName" => "John",
                 "lastName" => "Smith",
@@ -101,6 +128,7 @@ class CreateSubscriptionRequestTest extends TestCase
 
         $this->assertInstanceOf(NameAddress::class, $subscription->getBillTo());
         $this->assertInstanceOf(NameAddress::class, $subscription->getShipTo());
+        $this->assertInstanceOf(PaymentCreditCard::class, $subscription->getPayment());
     }
 
     public function testTrialAmountFormats()

@@ -4,6 +4,7 @@ namespace Omnipay\AuthorizeNetApi\Message\RecurringBilling;
 
 use Academe\AuthorizeNet\Amount\Amount;
 use Academe\AuthorizeNet\Payment\CreditCard;
+use Academe\AuthorizeNet\Payment\OpaqueData;
 use Academe\AuthorizeNet\Request\CreateSubscription;
 use Academe\AuthorizeNet\Request\Model\Customer;
 use Academe\AuthorizeNet\Request\Model\Interval;
@@ -17,6 +18,7 @@ use Money\Money;
 use Money\Number;
 use Money\Parser\DecimalMoneyParser;
 use Omnipay\AuthorizeNetApi\Message\AbstractRequest;
+use Omnipay\AuthorizeNetApi\Message\AuthorizeRequest;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
@@ -57,6 +59,14 @@ class CreateSubscriptionRequest extends AbstractRequest
         // Build the customer, and add the customer to the transaction
         // if it has any attributes set.
         $customer = new Customer($this->getCustomerType(), $this->getCustomerId());
+
+        $payment = null;
+        $opaqueDescriptor = $this->getOpaqueDataDescriptor();
+        $opaqueValue = $this->getOpaqueDataValue();
+        if ($opaqueDescriptor && $opaqueValue) {
+            $payment = new OpaqueData($opaqueDescriptor, $opaqueValue);
+        }
+        // @todo check for bank account details
 
         $card = $this->getCard();
         if ($card) {
@@ -110,20 +120,16 @@ class CreateSubscriptionRequest extends AbstractRequest
             }
 
             // A credit card has been supplied.
-            if ($card->getNumber()) {
-
+            if ($payment === null && $card->getNumber()) {
                 $card->validate();
-
-                $creditCard = new CreditCard($card->getNumber(), $card->getExpiryDate('Y-m'));
-
+                $payment = new CreditCard($card->getNumber(), $card->getExpiryDate('Y-m'));
                 if ($card->getCvv()) {
-                    $creditCard = $creditCard->withCardCode($card->getCvv());
+                    $payment = $payment->withCardCode($card->getCvv());
                 }
-
-                $subscription = $subscription->withPayment($creditCard);
             }
-            // @todo other payment methods
+            // @todo other payment methods (track1, track2)
         }
+        $subscription = $subscription->withPayment($payment);
 
         if ($subscription->getPayment() === null) {
             throw new InvalidRequestException('No valid payment method supplied');
@@ -366,6 +372,82 @@ class CreateSubscriptionRequest extends AbstractRequest
 
         if ($money !== null) {
             return (int) $money->getAmount();
+        }
+    }
+
+    /**
+     * @param string $value Example: 'COMMON.ACCEPT.INAPP.PAYMENT'.
+     * @return self
+     */
+    public function setOpaqueDataDescriptor($value)
+    {
+        return $this->setParameter('opaqueDataDescriptor', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpaqueDataDescriptor()
+    {
+        return $this->getParameter('opaqueDataDescriptor');
+    }
+
+    /**
+     * @param string $value Long text token usually 216 bytes long.
+     * @return self
+     */
+    public function setOpaqueDataValue($value)
+    {
+        return $this->setParameter('opaqueDataValue', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpaqueDataValue()
+    {
+        return $this->getParameter('opaqueDataValue');
+    }
+
+    /**
+     * @param string $descriptor
+     * @param string $value
+     * @return self
+     */
+    public function setOpaqueData($descriptor, $value)
+    {
+        $this->setOpaqueDataDescriptor($descriptor);
+        $this->setOpaqueDataValue($value);
+
+        return $this;
+    }
+
+    /**
+     * The opaque data comes in two parts, but Omnipay uses just one parameter for a card token.
+     * Join the descriptor and the value with a colon.
+     *
+     * @param string $value
+     * @return self
+     */
+    public function setToken($value)
+    {
+        list($opaqueDataDescriptor, $opaqueDataValue) = explode(AuthorizeRequest::CARD_TOKEN_SEPARATOR, $value, 2);
+        $this->setOpaqueData($opaqueDataDescriptor, $opaqueDataValue);
+        return $this;
+    }
+
+    /**
+     * Get the opaque data as a single token
+     *
+     * @return string|null
+     */
+    public function getToken()
+    {
+        $opaqueDataDescriptor = $this->getOpaqueDataDescriptor();
+        $opaqueDataValue = $this->getOpaqueDataValue();
+
+        if ($opaqueDataDescriptor && $opaqueDataValue) {
+            return $opaqueDataDescriptor.AuthorizeRequest::CARD_TOKEN_SEPARATOR.$opaqueDataValue;
         }
     }
 }
