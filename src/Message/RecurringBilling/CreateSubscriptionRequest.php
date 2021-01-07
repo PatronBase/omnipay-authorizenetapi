@@ -202,7 +202,7 @@ class CreateSubscriptionRequest extends AbstractRequest
 
     /**
      * Value must be one of Interval::INTERVAL_UNIT_*
-     * @param string $value The unit of time between payments, in association with intervalLength; 
+     * @param string $value The unit of time between payments, in association with intervalLength
      * @return self
      */
     public function setIntervalUnit($value)
