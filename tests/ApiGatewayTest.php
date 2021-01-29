@@ -2,6 +2,7 @@
 
 namespace Omnipay\AuthorizeNetApi;
 
+use Omnipay\AuthorizeNetApi\Message\CustomerProfiles\PaymentProfileResponse;
 use Omnipay\AuthorizeNetApi\Message\RecurringBilling\SubscriptionResponse;
 use Omnipay\Tests\GatewayTestCase;
 
@@ -44,6 +45,25 @@ class ApiGatewayTests extends GatewayTestCase
         ])->send();
 
         $this->assertInstanceOf(SubscriptionResponse::class, $response);
-        // @todo any asserts on $response?
+
+        // response tests
+        // $this->assertSame('', $response->getCustomerAddressId());
+        // $this->assertSame('', $response->getCustomerProfileId());
+        // $this->assertSame('', $response->getCustomerPaymentProfileId());
+        // $this->assertSame('', $response->getCustomerSubscriptionId());
+    }
+
+    public function testGetCustomerPaymentProfile()
+    {
+        $response = $this->gateway->getCustomerPaymentProfile([
+            "transactionId" => "123456",
+            "customerProfileId" => "10000",
+            "customerPaymentProfileId" => "20000",
+        ])->send();
+
+        $this->assertInstanceOf(PaymentProfileResponse::class, $response);
+
+        // response tests
+        // $this->assertSame('', $response->getCardType());
     }
 }

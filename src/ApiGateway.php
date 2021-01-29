@@ -14,6 +14,7 @@ use Omnipay\AuthorizeNetApi\Message\VoidRequest;
 use Omnipay\AuthorizeNetApi\Message\RefundRequest;
 use Omnipay\AuthorizeNetApi\Message\FetchTransactionRequest;
 use Omnipay\AuthorizeNetApi\Message\AcceptNotification;
+use Omnipay\AuthorizeNetApi\Message\CustomerProfiles\GetCustomerPaymentProfileRequest;
 use Omnipay\AuthorizeNetApi\Message\RecurringBilling\CreateSubscriptionRequest;
 
 class ApiGateway extends AbstractGateway
@@ -99,6 +100,17 @@ class ApiGateway extends AbstractGateway
     {
         return $this->createRequest(
             CreateSubscriptionRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Fetch a customer payment profile
+     */
+    public function getCustomerPaymentProfile(array $parameters = [])
+    {
+        return $this->createRequest(
+            GetCustomerPaymentProfileRequest::class,
             $parameters
         );
     }

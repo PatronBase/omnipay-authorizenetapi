@@ -219,7 +219,7 @@ class CreateSubscriptionRequest extends AbstractRequest
     }
 
     /**
-     * @param string $value The date the subscription is due to start
+     * @param string $value The date the subscription is due to start (YYYY-MM-DD)
      * @return self
      */
     public function setStartDate($value)
