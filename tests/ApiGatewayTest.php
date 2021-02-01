@@ -55,6 +55,8 @@ class ApiGatewayTests extends GatewayTestCase
 
     public function testGetCustomerPaymentProfile()
     {
+        $this->setMockHttpResponse('CustomerPaymentProfileSuccess.txt');
+
         $response = $this->gateway->getCustomerPaymentProfile([
             "transactionId" => "123456",
             "customerProfileId" => "10000",
@@ -62,8 +64,7 @@ class ApiGatewayTests extends GatewayTestCase
         ])->send();
 
         $this->assertInstanceOf(PaymentProfileResponse::class, $response);
-
         // response tests
-        // $this->assertSame('', $response->getCardType());
+        $this->assertSame('Visa', $response->getCardType());
     }
 }
