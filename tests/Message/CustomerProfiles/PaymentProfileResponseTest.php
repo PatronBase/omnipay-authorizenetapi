@@ -53,6 +53,7 @@ class PaymentProfileResponseTest extends TestCase
         $this->assertFalse($this->response->isRedirect());
         $this->assertNull($this->response->getTransactionId());
         $this->assertSame("Successful.", $this->response->getMessage());
+        $this->assertSame("XXXX1111", $this->response->getCardNumber());
         $this->assertSame("Visa", $this->response->getCardType());
         $this->assertSame("XXXX", $this->response->getExpirationDate());
     }
@@ -101,6 +102,7 @@ class PaymentProfileResponseTest extends TestCase
         $this->assertFalse($this->response->isRedirect());
         $this->assertNull($this->response->getTransactionId());
         $this->assertSame("The record cannot be found.", $this->response->getMessage());
+        $this->assertNull($this->response->getCardNumber());
         $this->assertNull($this->response->getCardType());
         $this->assertNull($this->response->getExpirationDate());
     }

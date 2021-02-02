@@ -23,6 +23,8 @@ class GetCustomerPaymentProfileRequestTest extends TestCase
 
             "customerProfileId" => "10000",
             "customerPaymentProfileId" => "20000",
+
+            "unmaskExpirationDate" => true,
         ]);
     }
 
@@ -34,5 +36,6 @@ class GetCustomerPaymentProfileRequestTest extends TestCase
         $this->assertSame("123456", $profile_request->getRefId());
         $this->assertSame("10000", $profile_request->getCustomerProfileId());
         $this->assertSame("20000", $profile_request->getCustomerPaymentProfileId());
+        $this->assertTrue($profile_request->getUnmaskExpirationDate());
     }
 }
