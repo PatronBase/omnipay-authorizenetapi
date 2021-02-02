@@ -27,4 +27,15 @@ class PaymentProfileResponse extends AbstractResponse
             return $payment->getCardType();
         }
     }
+
+    /**
+     * @return string|null  Expiration date if payment is a credit card, or null if payment is bank account
+     */
+    public function getExpirationDate()
+    {
+        $payment = $this->getValue('paymentProfile.payment');
+        if ($payment instanceof CreditCard) {
+            return $payment->getExpirationDate();
+        }
+    }
 }
