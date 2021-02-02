@@ -102,7 +102,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
     {
         $this->assertSignature();
 
-        if ($this->getEventTarget() === $this->getParsedData()::EVENT_TARGET_PAYMENT) {
+        if ($this->getEventTarget() === Notification::EVENT_TARGET_PAYMENT) {
             return $this->getPayload()->getTransId();
         }
     }
@@ -123,7 +123,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
         if ($responseCode === TransactionResponse::RESPONSE_CODE_APPROVED) {
             return static::STATUS_COMPLETED;
         } elseif ($responseCode === TransactionResponse::RESPONSE_CODE_PENDING) {
-            return static::STATUS_PENDIND;
+            return static::STATUS_PENDING;
         } elseif ($responseCode !== null) {
             return static::STATUS_FAILED;
         }
@@ -209,7 +209,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
      */
     public function getResponseCode()
     {
-        if ($this->getEventTarget() === $this->getParsedData()::EVENT_TARGET_PAYMENT) {
+        if ($this->getEventTarget() === Notification::EVENT_TARGET_PAYMENT) {
             return $this->getPayload()->getResponseCode();
         }
     }
@@ -219,7 +219,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
      */
     public function getAuthCode()
     {
-        if ($this->getEventTarget() === $this->getParsedData()::EVENT_TARGET_PAYMENT) {
+        if ($this->getEventTarget() === Notification::EVENT_TARGET_PAYMENT) {
             return $this->getPayload()->getAuthCode();
         }
     }
@@ -229,7 +229,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
      */
     public function getAvsResponse()
     {
-        if ($this->getEventTarget() === $this->getParsedData()::EVENT_TARGET_PAYMENT) {
+        if ($this->getEventTarget() === Notification::EVENT_TARGET_PAYMENT) {
             return $this->getPayload()->getAvsResponse();
         }
     }
@@ -239,7 +239,7 @@ class AcceptNotification extends AbstractRequest implements NotificationInterfac
      */
     public function getAuthAmount()
     {
-        if ($this->getEventTarget() === $this->getParsedData()::EVENT_TARGET_PAYMENT) {
+        if ($this->getEventTarget() === Notification::EVENT_TARGET_PAYMENT) {
             return $this->getPayload()->getAuthAmount();
         }
     }

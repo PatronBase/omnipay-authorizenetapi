@@ -11,6 +11,7 @@ namespace Omnipay\AuthorizeNetApi\Message;
 use Omnipay\Tests\TestCase;
 use Omnipay\Common\CreditCard;
 use Academe\AuthorizeNet\Request\Model\NameAddress;
+use Academe\AuthorizeNet\ServerRequest\Notification;
 
 class AcceptNotificationTest extends TestCase
 {
@@ -55,8 +56,10 @@ class AcceptNotificationTest extends TestCase
 
     public function testSuccess()
     {
+        $this->assertSame('701bf27d-d46f-4c3b-82f2-066448e2901e', $this->request->getNotificationId());
+        $this->assertSame('e6b3764d-5677-4fb1-a929-2e25a02f3073', $this->request->getWebhookId());
+        
         $this->assertSame('60116007277', $this->request->getTransactionReference());
-
         $this->assertSame('completed', $this->request->getTransactionStatus());
         $this->assertSame('', $this->request->getMessage());
 
@@ -64,8 +67,15 @@ class AcceptNotificationTest extends TestCase
         $this->assertSame('authorization', $this->request->getEventSubTarget());
         $this->assertSame('created', $this->request->getEventAction());
 
+        $this->assertSame(1, $this->request->getResponseCode());
+        $this->assertSame('P1XHLC', $this->request->getAuthCode());
+        $this->assertSame('Y', $this->request->getAvsResponse());
+        $this->assertSame(7.67, $this->request->getAuthAmount());
+
         $this->assertTrue($this->request->isSignatureValid());
         $this->assertNull($this->request->assertSignature());
+
+        $this->assertInstanceOf(Notification::class, $this->request->getParsedData());
     }
 
     /**
