@@ -18,6 +18,17 @@ class PaymentProfileResponse extends AbstractResponse
     }
 
     /**
+     * @return string|null  Card number if payment is a credit card, or null if payment is bank account
+     */
+    public function getCardNumber()
+    {
+        $payment = $this->getValue('paymentProfile.payment');
+        if ($payment instanceof CreditCard) {
+            return $payment->getCardNumber();
+        }
+    }
+
+    /**
      * @return string|null  Card type if payment is a credit card, or null if payment is bank account
      */
     public function getCardType()
