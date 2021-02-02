@@ -30,6 +30,10 @@ class GetCustomerPaymentProfileRequest extends AbstractRequest
             $request = $request->withRefId($this->getTransactionId());
         }
 
+        if ($this->getUnmaskExpirationDate() !== null) {
+            $request = $request->withUnmaskExpirationDate($this->getUnmaskExpirationDate());
+        }
+
         return $request;
     }
 
@@ -78,5 +82,22 @@ class GetCustomerPaymentProfileRequest extends AbstractRequest
     public function getCustomerPaymentProfileId()
     {
         return $this->getParameter('customerPaymentProfileId');
+    }
+
+    /**
+     * @param bool $value Whether or not to return the expiration date unmasked
+     * @return self
+     */
+    public function setUnmaskExpirationDate($value)
+    {
+        return $this->setParameter('unmaskExpirationDate', $value);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUnmaskExpirationDate()
+    {
+        return $this->getParameter('unmaskExpirationDate');
     }
 }
