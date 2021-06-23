@@ -16,6 +16,8 @@ use Omnipay\AuthorizeNetApi\Message\FetchTransactionRequest;
 use Omnipay\AuthorizeNetApi\Message\AcceptNotification;
 use Omnipay\AuthorizeNetApi\Message\CustomerProfiles\GetCustomerPaymentProfileRequest;
 use Omnipay\AuthorizeNetApi\Message\RecurringBilling\CreateSubscriptionRequest;
+use Omnipay\AuthorizeNetApi\Message\Webhooks\CreateWebhookRequest;
+use Omnipay\AuthorizeNetApi\Message\Webhooks\GetWebhookRequest;
 
 class ApiGateway extends AbstractGateway
 {
@@ -111,6 +113,28 @@ class ApiGateway extends AbstractGateway
     {
         return $this->createRequest(
             GetCustomerPaymentProfileRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Create a webhook
+     */
+    public function createWebhook(array $parameters = [])
+    {
+        return $this->createRequest(
+            CreateWebhookRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Get a webhook
+     */
+    public function getWebhook(array $parameters = [])
+    {
+        return $this->createRequest(
+            GetWebhookRequest::class,
             $parameters
         );
     }
