@@ -14,6 +14,7 @@ use Omnipay\AuthorizeNetApi\Message\VoidRequest;
 use Omnipay\AuthorizeNetApi\Message\RefundRequest;
 use Omnipay\AuthorizeNetApi\Message\FetchTransactionRequest;
 use Omnipay\AuthorizeNetApi\Message\AcceptNotification;
+use Omnipay\AuthorizeNetApi\Message\AuthenticateTestRequest;
 use Omnipay\AuthorizeNetApi\Message\CustomerProfiles\GetCustomerPaymentProfileRequest;
 use Omnipay\AuthorizeNetApi\Message\RecurringBilling\CreateSubscriptionRequest;
 use Omnipay\AuthorizeNetApi\Message\Webhooks\CreateWebhookRequest;
@@ -113,6 +114,17 @@ class ApiGateway extends AbstractGateway
     {
         return $this->createRequest(
             GetCustomerPaymentProfileRequest::class,
+            $parameters
+        );
+    }
+
+    /**
+     * Test current authentication credentials
+     */
+    public function authenticateTest(array $parameters = [])
+    {
+        return $this->createRequest(
+            AuthenticateTestRequest::class,
             $parameters
         );
     }
